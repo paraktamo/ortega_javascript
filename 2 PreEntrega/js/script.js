@@ -1,16 +1,3 @@
-/*Estructura HTML del proyecto. -------------------- AUN NO
-Variables de JS necesarias.----------------------- ok
-Funciones esenciales del proceso a simular.------- ok
-Metodos------------------------------------------- ok
-Objetos de JS.------------------------------------ ok
-Arrays.------------------------------------------- ok
-Métodos de búsqueda y filtrado sobre el Array.---- ok
-Capturar entradas mediante prompt().-------------- ok
-Efectuar una salida como resultado
-de los datos procesados, la cual
-puede hacerse por alert() o console.log().-------- AUN NO
-DOM ---------------------------------------------- AUN NO*/
-
 // debugger
 // /* DOM  -------------------------------------------------*/
 // const Cuerpo = document.body;
