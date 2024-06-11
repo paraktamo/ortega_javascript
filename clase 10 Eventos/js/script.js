@@ -92,5 +92,7 @@ input5.addEventListener('input', () => { // escucha el evento "input", es decir 
 });
 
 /*
------- submit: Se presiona el boton Submit.                                                              */
+------ submit: Se activa cuando el formulario es enviado.
+Normalmente se utiliza para validar el formulario antes de ser enviado al servidor o 
+bien para abortar el envío y procesarlo con JavaScript.                                                   */
 
