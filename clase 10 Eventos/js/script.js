@@ -96,3 +96,28 @@ input5.addEventListener('input', () => { // escucha el evento "input", es decir 
 Normalmente se utiliza para validar el formulario antes de ser enviado al servidor o 
 bien para abortar el envío y procesarlo con JavaScript.                                                   */
 
+let miFormulario = document.getElementById("formulario"); // captura el elemento por su id
+miFormulario.addEventListener("submit", validarFormulario); // escucha el evento
+
+function validarFormulario(e) { // la función de respuesta
+    e.preventDefault(); // evita el envío del formulario para que no se recargue la página y se ejecute la función
+    console.log("Formulario Enviado"); // imprime en consola
+}
+
+// _______________________________________________________________________________________________________________ //
+
+/* Datos del formulario usando event */
+
+let miFormulario1 = document.getElementById("formulario1");
+miFormulario1.addEventListener("submit", validarFormulario1);
+
+function validarFormulario1(e) {
+
+    e.preventDefault();    //Cancelamos el comportamiento del evento
+
+    let formulario = e.target    //Obtenemos el elemento desde el cual se disparó el evento, es un atributo del evento "submit"
+
+    console.log(formulario.children[0].value);    //Obtengo el valor del primero hijo <input type="text"> y lo imprimo
+
+    console.log(formulario.children[1].value);    //Obtengo el valor del segundo hijo <input type="number"> y lo imprimo
+}
