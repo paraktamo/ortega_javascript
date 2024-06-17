@@ -104,26 +104,26 @@ localStorage[clave] = "6"; // No se guarda este dato como objeto, se convierte a
 Con JSON.stringify podemos transformar un objeto JavaScript a un string en formato JSON. */
 
 const producto2 = { id: 2, producto: "Arroz" };
-const enJSON = JSON.stringify(producto1);
+const enJSON1 = JSON.stringify(producto2);
 
 console.log(enJSON); // {"id":2,"producto":"Arroz"}
 console.log(typeof producto2); // object
-console.log(typeof enJSON);    // string
+console.log(typeof enJSON1);    // string
 
-localStorage.setItem("producto1", enJSON); // Se guarda {"id":2,"producto":"Arroz"}
+localStorage.setItem("producto2", enJSON); // Se guarda {"id":2,"producto":"Arroz"}
 
 /* Parse
 Con JSON.parse podemos transformar un string en formato JSON a un objeto JavaScript. */
 
-const enJSON = '{"id":2,"producto":"Arroz"}';
-const producto1 = JSON.parse(enJSON);
+const enJSON2 = '{"id":2,"producto":"Arroz"}';
+const producto3 = JSON.parse(enJSON2);
 
 console.log(typeof enJSON);     // string
-console.log(typeof producto1);  // object
-console.log(producto1.producto); // Arroz
+console.log(typeof producto3);  // object
+console.log(producto3.producto); // Arroz
 
-const producto2 = JSON.parse(localStorage.getItem("producto1"));
-console.log(producto2.id);  // 2  
+const producto4 = JSON.parse(localStorage.getItem("producto4"));
+console.log(producto4.id);  // 2  
 
 // Ejemplo 1
 
@@ -153,18 +153,18 @@ class Producto {
 }
 //Obtenemos el listado de productos almacenado
 const almacenados = JSON.parse(localStorage.getItem("listaProductos"));
-const productos = [];
+const productos6 = [];
 //Iteramos almacenados con for...of para transformar todos sus objetos a tipo producto.
 for (const objeto of almacenados)
-    productos.push(new Producto(objeto));
+    productos6.push(new Producto(objeto));
 //Ahora tenemos objetos productos y podemos usar sus métodos
-for (const producto of productos)
+for (const producto of productos6)
     producto.sumaIva();
 
 // Ejemplo 3
 
 let usuario;
-let usuarioEnLS = JSON.stringify(localStorage.getItem(‘usuario’))
+let usuarioEnLS = JSON.stringify(localStorage.getItem(‘usuario’)) // comillas
 
 
 // Si había algo almacenado, lo recupero. Si no le pido un ingreso
@@ -177,7 +177,7 @@ if (usuarioEnLS) {
 // Ejemplo 4
 
 let carrito = []
-let carritoEnLS = JSON.stringify(localStorage.getItem(‘carrito’))
+let carritoEnLS = JSON.stringify(localStorage.getItem(‘carrito’)) // comillas
 
 // Inicializo mi app con carrito como array vacío o con el registro que haya quedado en LS
 if (carritoEnLS) {
