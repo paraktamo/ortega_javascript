@@ -227,7 +227,6 @@ function corroborarAlumno(m) {
     }
 }
 
-corroborarAlumno(bienvenida);
 
 /* eliminar un curso ------------------------------------------------- */
 
