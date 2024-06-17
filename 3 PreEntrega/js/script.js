@@ -2,27 +2,28 @@
 
 let bienvenida;
 
-// Creación de la sección de bienvenida al cargar la página
+// DOM de inicio
 document.addEventListener("DOMContentLoaded", function () {
-    const welcomeContainer = document.getElementById('welcome-container');
+    const welcomeContainer = document.getElementById('welcome-container'); // selecciono el contenedor
 
-    const welcomeSection = document.createElement('section');
-    welcomeSection.id = 'welcome-section';
+    const welcomeSection = document.createElement('section'); //creo una section que albergue el input
+    welcomeSection.id = 'welcome-section'; // le asigno una nueva id
 
-    const welcomeMessage = document.createElement('h3');
-    welcomeMessage.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o';
+    const welcomeMessage = document.createElement('h3'); // creo un h3 ára albergar el mensaje
+    welcomeMessage.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
 
-    const welcomeInput = document.createElement('input');
-    welcomeInput.type = 'number';
-    welcomeInput.id = 'welcome-input';
+    const welcomeInput = document.createElement('input'); // creo el inout de mi mensaje de bienvenida
+    welcomeInput.type = 'number'; // edito el tipo de input
+    welcomeInput.id = 'welcome-input'; // le otorgo una nueva id
 
-    const welcomeButton = document.createElement('button');
-    welcomeButton.innerText = 'Ingresar';
-    welcomeButton.addEventListener('click', function () {
-        bienvenida = parseInt(document.getElementById('welcome-input').value);
-        corroborarAlumno(bienvenida);
+    const welcomeButton = document.createElement('button'); // creo el boton 
+    welcomeButton.innerText = 'Ingresar'; // edito el texto del boton
+    welcomeButton.addEventListener('click', function () { // funcion para tomar el valor cuando apreten el boton
+        bienvenida = parseInt(document.getElementById('welcome-input').value); //selecciono el valor ingresado en el input por su id y lo guardo en bienvenida
+        corroborarAlumno(bienvenida); // llamo a la funcion
     });
 
+    // agrego todos los elementos segun su jeraquia
     welcomeSection.appendChild(welcomeMessage);
     welcomeSection.appendChild(welcomeInput);
     welcomeSection.appendChild(welcomeButton);
@@ -220,10 +221,26 @@ function mostrarMenu(a) {
 function corroborarAlumno(m) {
     const alumnoExiste = arrayAlumnos.some(alumno => alumno.id === m);
     if (alumnoExiste) {
+        let pExitoYaExiste = document.getElementById("pexitoBienvenida");
+        if (pExitoYaExiste) {
+            contenedorError.removeChild(pExitoExiste);
+        }
+        let contenedorExito = document.getElementById("exito");
+        let pExito = document.createElement("p");
+        pExito.id = "pexitoBienvenida";
+        // pExito.innerText = "Hola " + arrayAlumnos.find(alumno => alumno.id === m).nombre;
+        contenedorExito.appendChild(pExito);
         mostrarMenu(arrayAlumnos.find(alumno => alumno.id === m))
     } else {
-        let menuAgain = parseInt(prompt("No ingresaste un id válido, vuelve a intentarlo"));
-        corroborarAlumno(menuAgain)
+        let pErrorYaExiste = document.getElementById("perrorBienvenida");
+        if (pErrorYaExiste) {
+            contenedorError.removeChild(pErrorExiste);
+        }
+        let contenedorError = document.getElementById("error");
+        let pError = document.createElement("p");
+        pError.id = "perrorBienvenida";
+        pError.innerText = "No ingresaste un id válido, vuelve a intentarlo";
+        contenedorError.appendChild(pError);
     }
 }
 
