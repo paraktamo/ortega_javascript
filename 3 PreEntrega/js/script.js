@@ -4,30 +4,30 @@ let bienvenida;
 
 // DOM de inicio
 document.addEventListener("DOMContentLoaded", function () {
-    const welcomeContainer = document.getElementById('welcome-container'); // selecciono el contenedor
+    const contenedorB = document.getElementById('contenedorB'); // selecciono el contenedor
 
-    const welcomeSection = document.createElement('section'); //creo una section que albergue el input
-    welcomeSection.id = 'welcome-section'; // le asigno una nueva id
+    const divB = document.createElement('div'); //creo una section que albergue el input
+    divB.id = 'divB'; // le asigno una nueva id
 
-    const welcomeMessage = document.createElement('h3'); // creo un h3 ára albergar el mensaje
-    welcomeMessage.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
+    const mensajeB = document.createElement('h3'); // creo un h3 ára albergar el mensaje
+    mensajeB.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
 
-    const welcomeInput = document.createElement('input'); // creo el inout de mi mensaje de bienvenida
-    welcomeInput.type = 'number'; // edito el tipo de input
-    welcomeInput.id = 'welcome-input'; // le otorgo una nueva id
+    const InputB = document.createElement('input'); // creo el inout de mi mensaje de bienvenida
+    InputB.type = 'number'; // edito el tipo de input
+    InputB.id = 'bienvenida-input'; // le otorgo una nueva id
 
-    const welcomeButton = document.createElement('button'); // creo el boton 
-    welcomeButton.innerText = 'Ingresar'; // edito el texto del boton
-    welcomeButton.addEventListener('click', function () { // funcion para tomar el valor cuando apreten el boton
-        bienvenida = parseInt(document.getElementById('welcome-input').value); //selecciono el valor ingresado en el input por su id y lo guardo en bienvenida
+    const botonB = document.createElement('button'); // creo el boton 
+    botonB.innerText = 'Ingresar'; // edito el texto del boton
+    botonB.addEventListener('click', function () { // funcion para tomar el valor cuando apreten el boton
+        bienvenida = parseInt(document.getElementById('bienvenida-input').value); //selecciono el valor ingresado en el input por su id y lo guardo en bienvenida
         corroborarAlumno(bienvenida); // llamo a la funcion
     });
 
     // agrego todos los elementos segun su jeraquia
-    welcomeSection.appendChild(welcomeMessage);
-    welcomeSection.appendChild(welcomeInput);
-    welcomeSection.appendChild(welcomeButton);
-    welcomeContainer.appendChild(welcomeSection);
+    divB.appendChild(mensajeB);
+    divB.appendChild(InputB);
+    divB.appendChild(botonB);
+    contenedorB.appendChild(divB);
 });
 
 /* Cursos  -------------------------------------------------*/
@@ -221,15 +221,15 @@ function mostrarMenu(a) {
 function corroborarAlumno(m) {
     const alumnoExiste = arrayAlumnos.some(alumno => alumno.id === m);
     if (alumnoExiste) {
-        let pExitoYaExiste = document.getElementById("pexitoBienvenida");
-        if (pExitoYaExiste) {
-            contenedorError.removeChild(pExitoExiste);
-        }
-        let contenedorExito = document.getElementById("exito");
-        let pExito = document.createElement("p");
-        pExito.id = "pexitoBienvenida";
+        // let pExitoYaExiste = document.getElementById("pexitoBienvenida");
+        // if (pExitoYaExiste) {
+        //     contenedorError.removeChild(pExitoExiste);
+        // }
+        // let contenedorExito = document.getElementById("exito");
+        // let pExito = document.createElement("p");
+        // pExito.id = "pexitoBienvenida";
         // pExito.innerText = "Hola " + arrayAlumnos.find(alumno => alumno.id === m).nombre;
-        contenedorExito.appendChild(pExito);
+        // contenedorExito.appendChild(pExito);
         mostrarMenu(arrayAlumnos.find(alumno => alumno.id === m))
     } else {
         let pErrorYaExiste = document.getElementById("perrorBienvenida");
