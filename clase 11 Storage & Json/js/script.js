@@ -106,11 +106,11 @@ Con JSON.stringify podemos transformar un objeto JavaScript a un string en forma
 const producto2 = { id: 2, producto: "Arroz" };
 const enJSON1 = JSON.stringify(producto2);
 
-console.log(enJSON); // {"id":2,"producto":"Arroz"}
+console.log(enJSON1); // {"id":2,"producto":"Arroz"}
 console.log(typeof producto2); // object
 console.log(typeof enJSON1);    // string
 
-localStorage.setItem("producto2", enJSON); // Se guarda {"id":2,"producto":"Arroz"}
+localStorage.setItem("producto2", enJSON1); // Se guarda {"id":2,"producto":"Arroz"}
 
 /* Parse
 Con JSON.parse podemos transformar un string en formato JSON a un objeto JavaScript. */
@@ -164,7 +164,7 @@ for (const producto of productos6)
 // Ejemplo 3
 
 let usuario;
-let usuarioEnLS = JSON.stringify(localStorage.getItem(‘usuario’)) // comillas
+let usuarioEnLS = JSON.stringify(localStorage.getItem("usuario")) // comillas
 
 
 // Si había algo almacenado, lo recupero. Si no le pido un ingreso
@@ -177,7 +177,7 @@ if (usuarioEnLS) {
 // Ejemplo 4
 
 let carrito = []
-let carritoEnLS = JSON.stringify(localStorage.getItem(‘carrito’)) // comillas
+let carritoEnLS = JSON.stringify(localStorage.getItem("carrito")) // comillas
 
 // Inicializo mi app con carrito como array vacío o con el registro que haya quedado en LS
 if (carritoEnLS) {
