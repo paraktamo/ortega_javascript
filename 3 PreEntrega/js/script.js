@@ -86,6 +86,7 @@ const arrayAlumnos = [alumno1, alumno2, alumno3, alumno4, alumno5, alumno6, alum
 
 /* Menu -------------------------------------------------*/
 const contenedorContenido = document.getElementById('contenido');
+let arrayCursosDelAlumno = [];
 function mostrarAlumno(a) {
     contenedorContenido.innerHTML = '';
 
@@ -128,7 +129,6 @@ function mostrarCursos(a) {
         let cursoDiv = document.createElement('div');
         cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
         mostrarDiv.appendChild(cursoDiv);
-        //cursosA += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
     });
 
     contenedorContenido.appendChild(divMostrarCursos);
@@ -149,7 +149,6 @@ function tomarCursos(a) {
     const arrayCursosAlumno = a.curso.map(c => c.id)
     const arrayCursosDisponibles = arrayCursos.filter(curso => !arrayCursosAlumno.includes(curso.id));
 
-
     if (arrayCursosDisponibles.length === 0) {
         let vacioP = document.createElement('p');
         vacioP.id = 'mensajeVacio';
@@ -158,15 +157,15 @@ function tomarCursos(a) {
     } else {
         arrayCursosDisponibles.forEach(curso => {
             let cursoDiv = document.createElement('div');
-            cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+            cursoDiv.innerHTML = `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
 
             let botonTomar = document.createElement('button');
             botonTomar.innerText = 'Agregar';
             botonTomar.addEventListener('click', () => {
                 a.agregarCursos(curso);
-                // reducirCupo(curso);
+                tomarCursos(a); 
+                sacarCursos(a); 
                 alert("Curso de " + curso.nombre + " agregado con exito");
-                cursoDiv.remove();
             });
 
             cursoDiv.appendChild(botonTomar);
@@ -187,21 +186,20 @@ function sacarCursos(a) {
     const divSacarCursos = document.createElement('div');
     divSacarCursos.id = 'divSacarCursos';
 
-    const arrayCursosAlumno = a.curso.map(c => c.id)
-    const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.id));
+    const cursosAgregados = a.curso;
 
-    if (arrayCursosDisponibles.length !== 0) {
-        arrayCursosDisponibles.forEach(curso => {
+    if (cursosAgregados.length !== 0) {
+        cursosAgregados.forEach(curso => {
             let cursoDiv = document.createElement('div');
-            cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+            cursoDiv.innerHTML = `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
 
             let botonQuitar = document.createElement('button');
             botonQuitar.innerText = 'Remover';
             botonQuitar.addEventListener('click', () => {
-                a.quitarCursos(curso);
-                // PAIN-POINT: al remover un curso, no puedo verlo disponible en cursos disponibles
+                a.quitarCursos(curso.id);
+                tomarCursos(a); 
+                sacarCursos(a); 
                 alert("Curso de " + curso.nombre + " removido con exito");
-                cursoDiv.remove();
             });
 
             cursoDiv.appendChild(botonQuitar);
@@ -216,6 +214,7 @@ function sacarCursos(a) {
     contenedorContenido.appendChild(sacarH4);
     contenedorContenido.appendChild(divSacarCursos);
 }
+
 
 function verCarrito(a) {
     contenedorContenido.innerHTML = '';
@@ -353,7 +352,7 @@ function corroborarAlumno(m) {
     }
 }
 
-/* eliminar un curso ------------------------------------------------- */
+/* funciones viejas ------------------------------------------------- */
 
 function buscarCursoPorID(alumno, cursoID) { // recibo el objeto del alumno y el id del curso
     const cursoExiste = alumno.curso.some(curso => curso.id === cursoID);
@@ -364,6 +363,7 @@ function buscarCursoPorID(alumno, cursoID) { // recibo el objeto del alumno y el
         console.log("El curso no se encuentra dentro de los cursos del alumno.");
     }
 }
+
 
 function buscarAlumnoPorId(alumnoID, cursoID) {
     const alumnoExiste = arrayAlumnos.some(alumno => alumno.id === alumnoID);
