@@ -82,15 +82,25 @@ const alumno8 = new claseAlumnos(1008, "killa", "aracuyu");
 const arrayAlumnos = [alumno1, alumno2, alumno3, alumno4, alumno5, alumno6, alumno7, alumno8];
 
 /* Menu -------------------------------------------------*/
+const contenedorContenido = document.getElementById('contenido');
 function mostrarAlumno(a) {
-    let mensaje = parseInt(prompt("Mis datos: \nCodigo: " + a.id + "\nNombre " + a.nombre + "\nApellido " + a.apellido + "\nPara volver al menu anterior, presiona 0"));
-    if (mensaje === 0) {
-        mostrarMenu(a)
-    } else {
-        let advertencia = alert("Tu entrada no es válida");
-        mostrarAlumno(a)
-    }
-    // agregar opcion para volver
+    contenedorContenido.innerHTML = '';
+
+    const divMostrarAlum = document.createElement('div');
+    divMostrarAlum.id = 'divMostrarAlum';
+
+    const mostrarH4 = document.createElement('h4');
+    mostrarH4.id = 'mostrarH4';
+    mostrarH4.innerText = 'Mi Perfil';
+
+    const mostrarP = document.createElement('p');
+    mostrarP.id = 'mostrarP';
+    mostrarP.innerText = `Código: ${a.id} \nNombre: ${a.nombre} \nApellido: ${a.apellido}`;
+
+
+    contenedorContenido.appendChild(divMostrarAlum);
+    divMostrarAlum.appendChild(mostrarH4);
+    divMostrarAlum.appendChild(mostrarP);
 }
 
 function reducirCupo(e) {
@@ -101,44 +111,74 @@ function aumentarCupo(e) {
 }
 
 function mostrarCursos(a) {
-    let cursosA = "Los cursos disponibles son:\n"
+    contenedorContenido.innerHTML = '';
+
+    const divMostrarCursos = document.createElement('div');
+    divMostrarCursos.id = 'divMostrarCursos';
+    const mostrarH4 = document.createElement('h4');
+    mostrarH4.id = 'mostrarH4';
+    mostrarH4.innerText = 'Nuestros Cursos';
+    const mostrarDiv = document.createElement('div');
+    mostrarDiv.id = 'mostrardiv';
+
     arrayCursos.forEach(curso => {
-        cursosA += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+        let cursoDiv = document.createElement('div');
+        cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+        mostrarDiv.appendChild(cursoDiv);
+        //cursosA += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
     });
-    cursosA += "\nIngresa 0 para volver al menú anterior.";
-    let cursoPrompt = prompt(cursosA);
-    if (cursoPrompt == 0) {
-        mostrarMenu(a)
-    } else {
-        let advertencia = alert("Tu entrada no es válida");
-        mostrarCursos(a)
-    }
+
+    contenedorContenido.appendChild(divMostrarCursos);
+    divMostrarCursos.appendChild(mostrarH4);
+    divMostrarCursos.appendChild(mostrarDiv);
 }
 
 function tomarCursos(a) {
+    contenedorContenido.innerHTML = '';
+
+    const tomarH4 = document.createElement('h4');
+    tomarH4.id = 'tomarH4';
+    tomarH4.innerText = 'Cursos Disponibles';
+
+    const divTomarCursos = document.createElement('div');
+    divTomarCursos.id = 'divTomarCursos';
+
     const arrayCursosAlumno = a.curso.map(c => c.id)
     const arrayCursosDisponibles = arrayCursos.filter(curso => !arrayCursosAlumno.includes(curso.id));
-    let cursosB = "Los cursos disponibles son:\n"
-    arrayCursosDisponibles.forEach(curso => {
-        cursosB += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
-    });
-    cursosB += "\nIngresa el codigo del curso que quieras tomar.\nIngresa 0 para volver al menú anterior.";
-    let cursoPrompt = parseInt(prompt(cursosB));
-    const cursoDisponible = arrayCursosDisponibles.find((d) => d.id === cursoPrompt)
-    if (cursoPrompt === 0) {
-        mostrarMenu(a)
-    } else if (cursoDisponible) {
-        a.agregarCursos(cursoDisponible);
-        reducirCupo(cursoDisponible)
-        alert("Curso de " + cursoDisponible.nombre + " agregado con exito");
-        mostrarMenu(a)
-    } else {
-        alert("Tu entrada no es válida");
-        tomarCursos(a);
-    }
+
+    arrayCursosDisponibles.forEach(curso=>{
+        let cursoDiv = document.createElement('div');
+        cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+        divTomarCursos.appendChild(cursoDiv);
+    })
+
+    contenedorContenido.appendChild(tomarH4);
+    contenedorContenido.appendChild(divTomarCursos);
+    
+    
+    // let cursosB = "Los cursos disponibles son:\n"
+    // arrayCursosDisponibles.forEach(curso => {
+    //     cursosB += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+    // });
+    // cursosB += "\nIngresa el codigo del curso que quieras tomar.\nIngresa 0 para volver al menú anterior.";
+    // let cursoPrompt = parseInt(prompt(cursosB));
+    // const cursoDisponible = arrayCursosDisponibles.find((d) => d.id === cursoPrompt)
+    // if (cursoPrompt === 0) {
+    //     mostrarMenu(a)
+    // } else if (cursoDisponible) {
+    //     a.agregarCursos(cursoDisponible);
+    //     reducirCupo(cursoDisponible)
+    //     alert("Curso de " + cursoDisponible.nombre + " agregado con exito");
+    //     mostrarMenu(a)
+    // } else {
+    //     alert("Tu entrada no es válida");
+    //     tomarCursos(a);
+    // }
 }
 
 function sacarCursos(a) {
+    contenedorContenido.innerHTML = '';
+
     const arrayCursosAlumno = a.curso.map(c => c.id)
     if (arrayCursosAlumno.length !== 0) {
         const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.id));
@@ -172,6 +212,8 @@ function sacarCursos(a) {
 }
 
 function verCarrito(a) {
+    contenedorContenido.innerHTML = '';
+
     const arrayCursosAlumno = a.curso.map(c => c.valor);
     if (arrayCursosAlumno.length !== 0) {
         const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.valor));
@@ -194,47 +236,91 @@ function verCarrito(a) {
     }
 }
 
-function mostrarMenu(a) {
-    let menu = parseInt(prompt("Elige una opcion \n1. Ver mis datos\n2. Ver oferta de cursos\n3. Agregar curso a mi carrito \n4. Eliminar curso de mi carrito\n5. Ver mi carrito"));
+function inicializarBotones(a) {
+    let contenedorMenu = document.getElementById("contenedorMenu");
+    let menu = document.createElement("h5");
+    menu.innerHTML = "Menu";
 
-    switch (menu) {
-        case 1:
-            mostrarAlumno(a)
-            break;
-        case 2:
-            mostrarCursos(a)
-            break;
-        case 3:
-            tomarCursos(a)
-            break;
-        case 4:
-            sacarCursos(a)
-            break;
-        case 5:
-            verCarrito(a)
-            break;
-        default:
-            mostrarMenu(a)
+    if (!contenedorMenu || contenedorMenu.children.length > 0) return;
+
+    let verPerfilBoton = document.createElement("button");
+    verPerfilBoton.innerText = "Ver perfil";
+    verPerfilBoton.id = "verPerfilBoton";
+    verPerfilBoton.addEventListener("click", respuestaClick1)
+    function respuestaClick1() {
+        mostrarAlumno(a)
     }
+
+    let verOfertaBoton = document.createElement("button");
+    verOfertaBoton.innerText = "Ver oferta de cursos";
+    verOfertaBoton.id = "verOfertaBoton";
+    verOfertaBoton.addEventListener("click", respuestaClick2)
+    function respuestaClick2() {
+        mostrarCursos(a)
+    }
+
+    let agregarCursoBoton = document.createElement("button");
+    agregarCursoBoton.innerText = "Agregar curso a mi carrito";
+    agregarCursoBoton.id = "agregarCursoBoton";
+    agregarCursoBoton.addEventListener("click", respuestaClick3)
+    function respuestaClick3() {
+        tomarCursos(a)
+    }
+
+    let sacarCursoBoton = document.createElement("button");
+    sacarCursoBoton.innerText = "Sacar curso de mi carrito";
+    sacarCursoBoton.id = "sacarCursoBoton";
+    sacarCursoBoton.addEventListener("click", respuestaClick4)
+    function respuestaClick4() {
+        sacarCursos(a)
+    }
+
+    let verCarritoBoton = document.createElement("button");
+    verCarritoBoton.innerText = "Ver carrito";
+    verCarritoBoton.id = "verCarritoBoton";
+    verCarritoBoton.addEventListener("click", respuestaClick5)
+    function respuestaClick5() {
+        verCarrito(a)
+    }
+
+    contenedorMenu.appendChild(menu);
+    contenedorMenu.appendChild(verPerfilBoton);
+    contenedorMenu.appendChild(verOfertaBoton);
+    contenedorMenu.appendChild(agregarCursoBoton);
+    contenedorMenu.appendChild(sacarCursoBoton);
+    contenedorMenu.appendChild(verCarritoBoton);
+    
+
+    // Agregar listeners a los botones si es necesario
+}
+
+
+function mostrarMenu(a) {
+
+    inicializarBotones(a); // podria puentear esta funcion pero la voy a dejar para seguir probando la app
 }
 
 function corroborarAlumno(m) {
     const alumnoExiste = arrayAlumnos.some(alumno => alumno.id === m);
     if (alumnoExiste) {
-        // let pExitoYaExiste = document.getElementById("pexitoBienvenida");
-        // if (pExitoYaExiste) {
-        //     contenedorError.removeChild(pExitoExiste);
-        // }
-        // let contenedorExito = document.getElementById("exito");
-        // let pExito = document.createElement("p");
-        // pExito.id = "pexitoBienvenida";
-        // pExito.innerText = "Hola " + arrayAlumnos.find(alumno => alumno.id === m).nombre;
-        // contenedorExito.appendChild(pExito);
-        mostrarMenu(arrayAlumnos.find(alumno => alumno.id === m))
+        const alumno = arrayAlumnos.find(alumno => alumno.id === m);
+
+        const divB = document.getElementById('divB');
+        if (divB) {
+            divB.remove();
+        }
+
+        const contenedorB = document.getElementById('contenedorB');
+        const saludoAlumno = document.createElement('h3');
+        saludoAlumno.id = 'saludoAlumno';
+        saludoAlumno.innerText = `Hola, ${alumno.nombre}! Bienvenido/a al portal de Casa del Sur`;
+        contenedorB.appendChild(saludoAlumno);
+
+        mostrarMenu(alumno);
     } else {
         let pErrorYaExiste = document.getElementById("perrorBienvenida");
         if (pErrorYaExiste) {
-            contenedorError.removeChild(pErrorExiste);
+            pErrorYaExiste.remove();
         }
         let contenedorError = document.getElementById("error");
         let pError = document.createElement("p");
@@ -243,7 +329,6 @@ function corroborarAlumno(m) {
         contenedorError.appendChild(pError);
     }
 }
-
 
 /* eliminar un curso ------------------------------------------------- */
 
