@@ -59,12 +59,15 @@ class claseAlumnos {
     agregarCursos(curso) {
 
         this.curso.push(curso);
+        reducirCupo(curso);
 
     }
     quitarCursos(idCurso) { // debe recibir el id del curso
         const index = this.curso.findIndex(curso => curso.id === idCurso);
         if (index !== -1) {
+            const cursoEliminado = this.curso[index];
             this.curso.splice(index, 1);
+            aumentarCupo(cursoEliminado)
         } else {
             console.log(`Curso con ID ${idCurso} no encontrado.`);
         }
@@ -150,7 +153,7 @@ function tomarCursos(a) {
     if (arrayCursosDisponibles.length === 0) {
         let vacioP = document.createElement('p');
         vacioP.id = 'mensajeVacio';
-        vacioP.innerText = 'No hay cursos disponibles';
+        vacioP.innerText = 'No hay cursos disponibles para agregar';
         divTomarCursos.appendChild(vacioP);
     } else {
         arrayCursosDisponibles.forEach(curso => {
@@ -161,7 +164,7 @@ function tomarCursos(a) {
             botonTomar.innerText = 'Agregar';
             botonTomar.addEventListener('click', () => {
                 a.agregarCursos(curso);
-                reducirCupo(curso);
+                // reducirCupo(curso);
                 alert("Curso de " + curso.nombre + " agregado con exito");
                 cursoDiv.remove();
             });
@@ -179,68 +182,76 @@ function sacarCursos(a) {
 
     const sacarH4 = document.createElement('h4');
     sacarH4.id = 'sacarH4';
-    sacarH4.innerText = 'Cursos Disponibles';
+    sacarH4.innerText = 'Cursos Agregados';
 
     const divSacarCursos = document.createElement('div');
     divSacarCursos.id = 'divSacarCursos';
 
     const arrayCursosAlumno = a.curso.map(c => c.id)
-    //const arrayCursosDisponibles = arrayCursos.filter(curso => !arrayCursosAlumno.includes(curso.id));
+    const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.id));
 
-    if (arrayCursosAlumno.length !== 0) {
-        const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.id));
-        let cursosC = "Tus cursos son:\n"
+    if (arrayCursosDisponibles.length !== 0) {
         arrayCursosDisponibles.forEach(curso => {
-            cursosC += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+            let cursoDiv = document.createElement('div');
+            cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+
+            let botonQuitar = document.createElement('button');
+            botonQuitar.innerText = 'Remover';
+            botonQuitar.addEventListener('click', () => {
+                a.quitarCursos(curso);
+                // PAIN-POINT: al remover un curso, no puedo verlo disponible en cursos disponibles
+                alert("Curso de " + curso.nombre + " removido con exito");
+                cursoDiv.remove();
+            });
+
+            cursoDiv.appendChild(botonQuitar);
+            divSacarCursos.appendChild(cursoDiv);
         });
-        cursosC += "\nIngresa el codigo del curso que quieras sacar de tu carrito.\nIngresa 0 para volver al menú anterior.";
-        let cursoPrompt = parseInt(prompt(cursosC));
-        if (cursoPrompt === 0) {
-            mostrarMenu(a)
-        } else if (arrayCursosDisponibles.find((e) => e.id === cursoPrompt)) {
-            let confirmar = confirm("¿Estas segura/o de eliminar el curso de " + arrayCursosDisponibles.find((e) => e.id === cursoPrompt).nombre + " de tu carrito?")
-            if (confirmar) {
-                a.quitarCursos(cursoPrompt);
-                aumentarCupo(arrayCursosDisponibles.find((e) => e.id === cursoPrompt));
-                alert("Curso de " + arrayCursosDisponibles.find((e) => e.id === cursoPrompt).nombre + " quitado con exito");
-                // console.log(a.curso)
-                mostrarMenu(a)
-            } else {
-                sacarCursos(a);
-            }
-        } else {
-            alert("Tu entrada no es válida");
-            sacarCursos(a);
-        }
     } else {
-        alert("No tenes cursos en tu carrito");
-        mostrarMenu(a);
+        let vacioP = document.createElement('p');
+        vacioP.id = 'mensajeVacio';
+        vacioP.innerText = 'No hay cursos disponibles para quitar';
+        divSacarCursos.appendChild(vacioP);
     }
+    contenedorContenido.appendChild(sacarH4);
+    contenedorContenido.appendChild(divSacarCursos);
 }
 
 function verCarrito(a) {
     contenedorContenido.innerHTML = '';
 
-    const arrayCursosAlumno = a.curso.map(c => c.valor);
-    if (arrayCursosAlumno.length !== 0) {
-        const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.valor));
-        const total = arrayCursosAlumno.reduce((acumulador, elemento) => acumulador + elemento, 0);
-        let mostrarCarro = "Tu carrito: \n"
-        arrayCursosDisponibles.forEach(curso => {
-            mostrarCarro += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} \n`;
+    const verH4 = document.createElement('h4');
+    verH4.id = 'verH4';
+    verH4.innerText = 'Mi Carrito';
+
+    const divVerCarrito = document.createElement('div');
+    divVerCarrito.id = 'divVerCarrito';
+
+    const cursosAgregados = a.curso;
+
+    if (cursosAgregados.length !== 0) {
+        const total = cursosAgregados.reduce((acumulador, curso) => acumulador + curso.valor, 0);
+
+        cursosAgregados.forEach(curso => {
+            const mensajeCarro = document.createElement('div');
+            mensajeCarro.innerHTML = `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} \n`;
+            divVerCarrito.appendChild(mensajeCarro);
         });
-        mostrarCarro += `Total: $${total}\nIngresa 0 para volver al menú anterior.\n`
-        let mostrarCarroPrompt = parseInt(prompt(mostrarCarro));
-        if (mostrarCarroPrompt === 0) {
-            mostrarMenu(a)
-        } else {
-            alert("Tu entrada no es válida");
-            verCarrito(a);
-        }
+
+        const divTotalCarrito = document.createElement('div');
+        divTotalCarrito.id = 'divTotalCarrito';
+        divTotalCarrito.innerText = `Total: $${total}`;
+        divVerCarrito.appendChild(divTotalCarrito);
     } else {
-        alert("No tenes cursos en tu carrito");
-        mostrarMenu(a);
+        let vacioP = document.createElement('p');
+        vacioP.id = 'mensajeVacio';
+        vacioP.innerText = 'Carrito Vacío';
+        divVerCarrito.appendChild(vacioP);
     }
+
+    contenedorContenido.appendChild(verH4);
+    contenedorContenido.appendChild(divVerCarrito);
+
 }
 
 function inicializarBotones(a) {
