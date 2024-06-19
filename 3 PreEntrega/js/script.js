@@ -146,40 +146,47 @@ function tomarCursos(a) {
     const arrayCursosAlumno = a.curso.map(c => c.id)
     const arrayCursosDisponibles = arrayCursos.filter(curso => !arrayCursosAlumno.includes(curso.id));
 
-    arrayCursosDisponibles.forEach(curso=>{
-        let cursoDiv = document.createElement('div');
-        cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
-        divTomarCursos.appendChild(cursoDiv);
-    })
 
+    if (arrayCursosDisponibles.length === 0) {
+        let vacioP = document.createElement('p');
+        vacioP.id = 'mensajeVacio';
+        vacioP.innerText = 'No hay cursos disponibles';
+        divTomarCursos.appendChild(vacioP);
+    } else {
+        arrayCursosDisponibles.forEach(curso => {
+            let cursoDiv = document.createElement('div');
+            cursoDiv.innerHTML += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
+
+            let botonTomar = document.createElement('button');
+            botonTomar.innerText = 'Agregar';
+            botonTomar.addEventListener('click', () => {
+                a.agregarCursos(curso);
+                reducirCupo(curso);
+                alert("Curso de " + curso.nombre + " agregado con exito");
+                cursoDiv.remove();
+            });
+
+            cursoDiv.appendChild(botonTomar);
+            divTomarCursos.appendChild(cursoDiv);
+        });
+    }
     contenedorContenido.appendChild(tomarH4);
     contenedorContenido.appendChild(divTomarCursos);
-    
-    
-    // let cursosB = "Los cursos disponibles son:\n"
-    // arrayCursosDisponibles.forEach(curso => {
-    //     cursosB += `Codigo: ${curso.id}. ${curso.nombre} - $${curso.valor} - Cupo: ${curso.cupo} \n`;
-    // });
-    // cursosB += "\nIngresa el codigo del curso que quieras tomar.\nIngresa 0 para volver al menú anterior.";
-    // let cursoPrompt = parseInt(prompt(cursosB));
-    // const cursoDisponible = arrayCursosDisponibles.find((d) => d.id === cursoPrompt)
-    // if (cursoPrompt === 0) {
-    //     mostrarMenu(a)
-    // } else if (cursoDisponible) {
-    //     a.agregarCursos(cursoDisponible);
-    //     reducirCupo(cursoDisponible)
-    //     alert("Curso de " + cursoDisponible.nombre + " agregado con exito");
-    //     mostrarMenu(a)
-    // } else {
-    //     alert("Tu entrada no es válida");
-    //     tomarCursos(a);
-    // }
 }
 
 function sacarCursos(a) {
     contenedorContenido.innerHTML = '';
 
+    const sacarH4 = document.createElement('h4');
+    sacarH4.id = 'sacarH4';
+    sacarH4.innerText = 'Cursos Disponibles';
+
+    const divSacarCursos = document.createElement('div');
+    divSacarCursos.id = 'divSacarCursos';
+
     const arrayCursosAlumno = a.curso.map(c => c.id)
+    //const arrayCursosDisponibles = arrayCursos.filter(curso => !arrayCursosAlumno.includes(curso.id));
+
     if (arrayCursosAlumno.length !== 0) {
         const arrayCursosDisponibles = arrayCursos.filter(curso => arrayCursosAlumno.includes(curso.id));
         let cursosC = "Tus cursos son:\n"
@@ -289,7 +296,7 @@ function inicializarBotones(a) {
     contenedorMenu.appendChild(agregarCursoBoton);
     contenedorMenu.appendChild(sacarCursoBoton);
     contenedorMenu.appendChild(verCarritoBoton);
-    
+
 
     // Agregar listeners a los botones si es necesario
 }
@@ -305,9 +312,13 @@ function corroborarAlumno(m) {
     if (alumnoExiste) {
         const alumno = arrayAlumnos.find(alumno => alumno.id === m);
 
-        const divB = document.getElementById('divB');
+        let divB = document.getElementById('divB');
         if (divB) {
             divB.remove();
+        }
+        let pErrorYaExiste = document.getElementById("perrorBienvenida");
+        if (pErrorYaExiste) {
+            pErrorYaExiste.remove();
         }
 
         const contenedorB = document.getElementById('contenedorB');
@@ -317,6 +328,7 @@ function corroborarAlumno(m) {
         contenedorB.appendChild(saludoAlumno);
 
         mostrarMenu(alumno);
+
     } else {
         let pErrorYaExiste = document.getElementById("perrorBienvenida");
         if (pErrorYaExiste) {
