@@ -30,6 +30,27 @@ document.addEventListener("DOMContentLoaded", function () {
     contenedorB.appendChild(divB);
 });
 
+// local de inicio
+const guardarLocal = (clave, valor) => { localStorage.setItem(clave, valor) };
+const guardarSession = (clave, valor) => { sessionStorage.setItem(clave, valor) };
+
+// guardarLocal("listaProductos", JSON.stringify(productos)); ||||| para almacenar un array completo
+// guardarSession("carrito", JSON.stringify(carrito)); ||||| para almacenar un array completo
+
+/* 
+let usuario;
+let usuarioEnLS = JSON.stringify(localStorage.getItem(‘usuario’))
+
+Si había algo almacenado, lo recupero. Si no le pido un ingreso
+
+if (usuarioEnLS) {
+usuario = usuarioEnLS
+} else {
+usuario = prompt(‘Ingrese su nombre de usuario’)
+}   
+*/
+
+
 /* Cursos  -------------------------------------------------*/
 class claseCursos {
     constructor(id, nombre, valor, cupo, virtual) {
@@ -86,7 +107,7 @@ const arrayAlumnos = [alumno1, alumno2, alumno3, alumno4, alumno5, alumno6, alum
 
 /* Menu -------------------------------------------------*/
 const contenedorContenido = document.getElementById('contenido');
-let arrayCursosDelAlumno = [];
+
 function mostrarAlumno(a) {
     contenedorContenido.innerHTML = '';
 
@@ -163,8 +184,8 @@ function tomarCursos(a) {
             botonTomar.innerText = 'Agregar';
             botonTomar.addEventListener('click', () => {
                 a.agregarCursos(curso);
-                tomarCursos(a); 
-                sacarCursos(a); 
+                tomarCursos(a);
+                sacarCursos(a);
                 alert("Curso de " + curso.nombre + " agregado con exito");
             });
 
@@ -197,8 +218,8 @@ function sacarCursos(a) {
             botonQuitar.innerText = 'Remover';
             botonQuitar.addEventListener('click', () => {
                 a.quitarCursos(curso.id);
-                tomarCursos(a); 
-                sacarCursos(a); 
+                tomarCursos(a);
+                sacarCursos(a);
                 alert("Curso de " + curso.nombre + " removido con exito");
             });
 
@@ -253,6 +274,11 @@ function verCarrito(a) {
 
 }
 
+function cerrarSesion() {
+    localStorage.clear();
+    window.location.reload();
+}
+
 function inicializarBotones(a) {
     let contenedorMenu = document.getElementById("contenedorMenu");
     let menu = document.createElement("h5");
@@ -300,12 +326,21 @@ function inicializarBotones(a) {
         verCarrito(a)
     }
 
+    let salirBoton = document.createElement("button");
+    salirBoton.innerText = "Cerrar Sesión";
+    salirBoton.id = "salirBoton";
+    salirBoton.addEventListener("click", respuestaClick6)
+    function respuestaClick6() {
+        cerrarSesion(a)
+    }
+
     contenedorMenu.appendChild(menu);
     contenedorMenu.appendChild(verPerfilBoton);
     contenedorMenu.appendChild(verOfertaBoton);
     contenedorMenu.appendChild(agregarCursoBoton);
     contenedorMenu.appendChild(sacarCursoBoton);
     contenedorMenu.appendChild(verCarritoBoton);
+    contenedorMenu.appendChild(salirBoton);
 
 
     // Agregar listeners a los botones si es necesario
