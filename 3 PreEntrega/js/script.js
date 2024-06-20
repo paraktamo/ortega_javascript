@@ -1,5 +1,3 @@
-// debugger
-
 let bienvenida;
 
 // DOM de inicio
@@ -16,26 +14,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function inicializar() {
-        const contenedorB = document.getElementById('contenedorB'); // selecciono el contenedor
+        const contenedorB = document.getElementById('contenedorB');
 
-        const divB = document.createElement('div'); //creo una section que albergue el input
-        divB.id = 'divB'; // le asigno una nueva id
+        const divB = document.createElement('div');
+        divB.id = 'divB';
 
-        const mensajeB = document.createElement('h3'); // creo un h3 ára albergar el mensaje
+        const mensajeB = document.createElement('h3');
         mensajeB.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
 
-        const InputB = document.createElement('input'); // creo el inout de mi mensaje de bienvenida
-        InputB.type = 'number'; // edito el tipo de input
-        InputB.id = 'bienvenida-input'; // le otorgo una nueva id
+        const InputB = document.createElement('input');
+        InputB.type = 'number';
+        InputB.id = 'bienvenida-input';
 
-        const botonB = document.createElement('button'); // creo el boton 
-        botonB.innerText = 'Ingresar'; // edito el texto del boton
-        botonB.addEventListener('click', function () { // funcion para tomar el valor cuando apreten el boton
-            bienvenida = parseInt(document.getElementById('bienvenida-input').value); //selecciono el valor ingresado en el input por su id y lo guardo en bienvenida
-            corroborarAlumno(bienvenida); // llamo a la funcion
+        const botonB = document.createElement('button');
+        botonB.innerText = 'Ingresar';
+        botonB.addEventListener('click', function () {
+            bienvenida = parseInt(document.getElementById('bienvenida-input').value);
+            corroborarAlumno(bienvenida);
         });
 
-        // agrego todos los elementos segun su jeraquia
+
         divB.appendChild(mensajeB);
         divB.appendChild(InputB);
         divB.appendChild(botonB);
@@ -46,31 +44,10 @@ document.addEventListener("DOMContentLoaded", function () {
 const guardarLocal = (clave, valor) => { localStorage.setItem(clave, JSON.stringify(valor)) };
 const guardarSession = (clave, valor) => { sessionStorage.setItem(clave, JSON.stringify(valor)) };
 
-// guardarLocal("listaProductos", JSON.stringify(productos)); ||||| para almacenar un array completo
-// guardarSession("carrito", JSON.stringify(carrito)); ||||| para almacenar un array completo
-
-
-// function guardarCarritoEnLocalStorage() {
-//     localStorage.setItem('carrito', JSON.stringify(carrito));
-// }
-
-// function tomarCarritoDeLocalStorage() {
-//     const carritoGuardado = localStorage.getItem('carrito');
-//     return carritoGuardado ? JSON.parse(carritoGuardado) : [];
-// }
-
-// function agregarCursoAlCarrito(curso) {
-//     // Agregar curso al carrito (supongamos que `carrito` es un array global)
-//     carrito.push(curso);
-
-//     // Guardar el carrito actualizado en localStorage
-//     guardarCarritoEnLocalStorage();
-
-//     // Otros pasos necesarios después de agregar un curso al carrito, si los hay
-//     // Por ejemplo, actualizar la interfaz de usuario
-// }
-
-// let carritoEnStorage = tomarCarritoEnLocalStorage()
+const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+function guardarCarritoEnLocalStorage(carrito) {
+    guardarLocal("carrito", carrito.map(curso => curso.id)); // Guardar solo los IDs de los cursos
+}
 
 /* Cursos  -------------------------------------------------*/
 class claseCursos {
@@ -102,6 +79,7 @@ class claseAlumnos {
 
         this.curso.push(curso);
         reducirCupo(curso);
+        guardarCarritoEnLocalStorage(this.curso); // prueba
 
     }
     quitarCursos(idCurso) { // debe recibir el id del curso
@@ -110,6 +88,7 @@ class claseAlumnos {
             const cursoEliminado = this.curso[index];
             this.curso.splice(index, 1);
             aumentarCupo(cursoEliminado)
+            guardarCarritoEnLocalStorage(this.curso) //prueba
         } else {
             console.log(`Curso con ID ${idCurso} no encontrado.`);
         }
@@ -308,6 +287,11 @@ function inicializarBotones(a) {
 
     if (!contenedorMenu || contenedorMenu.children.length > 0) return;
 
+    const carritoGuardado = JSON.parse(localStorage.getItem('carrito'));
+    if (carritoGuardado) {
+        a.curso = carritoGuardado.map(idCurso => arrayCursos.find(curso => curso.id === idCurso));
+    } // prueba
+
     let verPerfilBoton = document.createElement("button");
     verPerfilBoton.innerText = "Ver perfil";
     verPerfilBoton.id = "verPerfilBoton";
@@ -363,14 +347,10 @@ function inicializarBotones(a) {
     contenedorMenu.appendChild(sacarCursoBoton);
     contenedorMenu.appendChild(verCarritoBoton);
     contenedorMenu.appendChild(salirBoton);
-
-
-    // Agregar listeners a los botones si es necesario
 }
 
 
 function mostrarMenu(a) {
-
     inicializarBotones(a); // podria puentear esta funcion pero la voy a dejar para seguir probando la app
 }
 
@@ -407,28 +387,5 @@ function corroborarAlumno(m) {
         pError.id = "perrorBienvenida";
         pError.innerText = "No ingresaste un id válido, vuelve a intentarlo";
         contenedorError.appendChild(pError);
-    }
-}
-
-/* funciones viejas ------------------------------------------------- */
-
-function buscarCursoPorID(alumno, cursoID) { // recibo el objeto del alumno y el id del curso
-    const cursoExiste = alumno.curso.some(curso => curso.id === cursoID);
-    if (cursoExiste) {
-        alumno.quitarCursos(cursoID);
-        console.log("Curso con ID " + cursoID + " eliminado de los cursos del alumno " + alumno.nombre);
-    } else {
-        console.log("El curso no se encuentra dentro de los cursos del alumno.");
-    }
-}
-
-
-function buscarAlumnoPorId(alumnoID, cursoID) {
-    const alumnoExiste = arrayAlumnos.some(alumno => alumno.id === alumnoID);
-    if (alumnoExiste) {
-        const alumnoObjLocalizado = arrayAlumnos.find(alumno => alumno.id === alumnoID);
-        buscarCursoPorID(alumnoObjLocalizado, cursoID);
-    } else {
-        console.log("El alumno con ID " + alumnoID + " no existe.");
     }
 }
