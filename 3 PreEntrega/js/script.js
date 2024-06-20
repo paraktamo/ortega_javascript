@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         divB.id = 'divB';
 
         const mensajeB = document.createElement('h3');
-        mensajeB.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
+        mensajeB.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; 
 
         const InputB = document.createElement('input');
         InputB.type = 'number';
@@ -46,9 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
 const guardarLocal = (clave, valor) => { localStorage.setItem(clave, JSON.stringify(valor)) };
 const guardarSession = (clave, valor) => { sessionStorage.setItem(clave, JSON.stringify(valor)) };
 
-const carrito = JSON.parse(localStorage.getItem('carrito')) ?? []; // prueba
+const carrito = JSON.parse(localStorage.getItem('carrito')) ?? []; 
 function guardarCarritoEnLocalStorage(carrito) {
-    guardarLocal("carrito", carrito.map(curso => curso.id)); // Guardar solo los IDs de los cursos
+    guardarLocal("carrito", carrito.map(curso => curso.id)); 
 }
 
 /* Cursos  -------------------------------------------------*/
@@ -81,16 +81,16 @@ class claseAlumnos {
 
         this.curso.push(curso);
         reducirCupo(curso);
-        guardarCarritoEnLocalStorage(this.curso); // prueba
+        guardarCarritoEnLocalStorage(this.curso); 
 
     }
-    quitarCursos(idCurso) { // debe recibir el id del curso
+    quitarCursos(idCurso) {
         const index = this.curso.findIndex(curso => curso.id === idCurso);
         if (index !== -1) {
             const cursoEliminado = this.curso[index];
             this.curso.splice(index, 1);
             aumentarCupo(cursoEliminado)
-            guardarCarritoEnLocalStorage(this.curso) //prueba
+            guardarCarritoEnLocalStorage(this.curso)
         } else {
             console.log(`Curso con ID ${idCurso} no encontrado.`);
         }
