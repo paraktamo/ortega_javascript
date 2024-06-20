@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let usuario;
     let usuarioEnLS = JSON.parse(localStorage.getItem('usuario'))
+    
+    usuario = usuarioEnLS ? usuarioEnLS : null;
 
     if (usuarioEnLS) {
         usuario = usuarioEnLS
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 const guardarLocal = (clave, valor) => { localStorage.setItem(clave, JSON.stringify(valor)) };
 const guardarSession = (clave, valor) => { sessionStorage.setItem(clave, JSON.stringify(valor)) };
 
-const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+const carrito = JSON.parse(localStorage.getItem('carrito')) ?? []; // prueba
 function guardarCarritoEnLocalStorage(carrito) {
     guardarLocal("carrito", carrito.map(curso => curso.id)); // Guardar solo los IDs de los cursos
 }
@@ -129,10 +131,10 @@ function mostrarAlumno(a) {
 }
 
 function reducirCupo(e) {
-    e.cupo = e.cupo - 1;
+    e.cupo--;
 }
 function aumentarCupo(e) {
-    e.cupo = e.cupo + 1;
+    e.cupo++;
 }
 
 function mostrarCursos(a) {
@@ -290,7 +292,7 @@ function inicializarBotones(a) {
     const carritoGuardado = JSON.parse(localStorage.getItem('carrito'));
     if (carritoGuardado) {
         a.curso = carritoGuardado.map(idCurso => arrayCursos.find(curso => curso.id === idCurso));
-    } // prueba
+    }
 
     let verPerfilBoton = document.createElement("button");
     verPerfilBoton.innerText = "Ver perfil";
