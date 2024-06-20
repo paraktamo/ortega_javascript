@@ -4,52 +4,73 @@ let bienvenida;
 
 // DOM de inicio
 document.addEventListener("DOMContentLoaded", function () {
-    const contenedorB = document.getElementById('contenedorB'); // selecciono el contenedor
 
-    const divB = document.createElement('div'); //creo una section que albergue el input
-    divB.id = 'divB'; // le asigno una nueva id
+    let usuario;
+    let usuarioEnLS = JSON.parse(localStorage.getItem('usuario'))
 
-    const mensajeB = document.createElement('h3'); // creo un h3 ára albergar el mensaje
-    mensajeB.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
+    if (usuarioEnLS) {
+        usuario = usuarioEnLS
+        inicializarBotones(usuario)
+    } else {
+        inicializar()
+    }
 
-    const InputB = document.createElement('input'); // creo el inout de mi mensaje de bienvenida
-    InputB.type = 'number'; // edito el tipo de input
-    InputB.id = 'bienvenida-input'; // le otorgo una nueva id
+    function inicializar() {
+        const contenedorB = document.getElementById('contenedorB'); // selecciono el contenedor
 
-    const botonB = document.createElement('button'); // creo el boton 
-    botonB.innerText = 'Ingresar'; // edito el texto del boton
-    botonB.addEventListener('click', function () { // funcion para tomar el valor cuando apreten el boton
-        bienvenida = parseInt(document.getElementById('bienvenida-input').value); //selecciono el valor ingresado en el input por su id y lo guardo en bienvenida
-        corroborarAlumno(bienvenida); // llamo a la funcion
-    });
+        const divB = document.createElement('div'); //creo una section que albergue el input
+        divB.id = 'divB'; // le asigno una nueva id
 
-    // agrego todos los elementos segun su jeraquia
-    divB.appendChild(mensajeB);
-    divB.appendChild(InputB);
-    divB.appendChild(botonB);
-    contenedorB.appendChild(divB);
+        const mensajeB = document.createElement('h3'); // creo un h3 ára albergar el mensaje
+        mensajeB.innerText = 'Te damos la bienvenida al portal de Casa del Sur, por favor ingresa tu n° de alumna/o'; // edito el contenido del h3
+
+        const InputB = document.createElement('input'); // creo el inout de mi mensaje de bienvenida
+        InputB.type = 'number'; // edito el tipo de input
+        InputB.id = 'bienvenida-input'; // le otorgo una nueva id
+
+        const botonB = document.createElement('button'); // creo el boton 
+        botonB.innerText = 'Ingresar'; // edito el texto del boton
+        botonB.addEventListener('click', function () { // funcion para tomar el valor cuando apreten el boton
+            bienvenida = parseInt(document.getElementById('bienvenida-input').value); //selecciono el valor ingresado en el input por su id y lo guardo en bienvenida
+            corroborarAlumno(bienvenida); // llamo a la funcion
+        });
+
+        // agrego todos los elementos segun su jeraquia
+        divB.appendChild(mensajeB);
+        divB.appendChild(InputB);
+        divB.appendChild(botonB);
+        contenedorB.appendChild(divB);
+    }
 });
-
 // local de inicio
-const guardarLocal = (clave, valor) => { localStorage.setItem(clave, valor) };
-const guardarSession = (clave, valor) => { sessionStorage.setItem(clave, valor) };
+const guardarLocal = (clave, valor) => { localStorage.setItem(clave, JSON.stringify(valor)) };
+const guardarSession = (clave, valor) => { sessionStorage.setItem(clave, JSON.stringify(valor)) };
 
 // guardarLocal("listaProductos", JSON.stringify(productos)); ||||| para almacenar un array completo
 // guardarSession("carrito", JSON.stringify(carrito)); ||||| para almacenar un array completo
 
-/* 
-let usuario;
-let usuarioEnLS = JSON.stringify(localStorage.getItem(‘usuario’))
 
-Si había algo almacenado, lo recupero. Si no le pido un ingreso
+// function guardarCarritoEnLocalStorage() {
+//     localStorage.setItem('carrito', JSON.stringify(carrito));
+// }
 
-if (usuarioEnLS) {
-usuario = usuarioEnLS
-} else {
-usuario = prompt(‘Ingrese su nombre de usuario’)
-}   
-*/
+// function tomarCarritoDeLocalStorage() {
+//     const carritoGuardado = localStorage.getItem('carrito');
+//     return carritoGuardado ? JSON.parse(carritoGuardado) : [];
+// }
 
+// function agregarCursoAlCarrito(curso) {
+//     // Agregar curso al carrito (supongamos que `carrito` es un array global)
+//     carrito.push(curso);
+
+//     // Guardar el carrito actualizado en localStorage
+//     guardarCarritoEnLocalStorage();
+
+//     // Otros pasos necesarios después de agregar un curso al carrito, si los hay
+//     // Por ejemplo, actualizar la interfaz de usuario
+// }
+
+// let carritoEnStorage = tomarCarritoEnLocalStorage()
 
 /* Cursos  -------------------------------------------------*/
 class claseCursos {
@@ -169,6 +190,7 @@ function tomarCursos(a) {
 
     const arrayCursosAlumno = a.curso.map(c => c.id)
     const arrayCursosDisponibles = arrayCursos.filter(curso => !arrayCursosAlumno.includes(curso.id));
+
 
     if (arrayCursosDisponibles.length === 0) {
         let vacioP = document.createElement('p');
@@ -356,6 +378,7 @@ function corroborarAlumno(m) {
     const alumnoExiste = arrayAlumnos.some(alumno => alumno.id === m);
     if (alumnoExiste) {
         const alumno = arrayAlumnos.find(alumno => alumno.id === m);
+        guardarLocal("usuario", alumno);
 
         let divB = document.getElementById('divB');
         if (divB) {
